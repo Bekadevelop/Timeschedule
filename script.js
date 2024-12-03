@@ -39,14 +39,14 @@ function defaultEvents(dataDay, dataName, dataNotes, classTag) {
 
 defaultEvents(today, "YEAH!", "Today is your day", "important");
 defaultEvents(
-  "2022-12-25",
+  "2024-12-25",
   "MERRY CHRISTMAS",
   "A lot of gift!!!!",
   "festivity"
 );
-defaultEvents("2022-05-04", "LUCA'S BIRTHDAY", "Another gifts...?", "birthday");
+defaultEvents("2024-05-04", "LUCA'S BIRTHDAY", "Another gifts...?", "birthday");
 defaultEvents(
-  "2022-03-03",
+  "2024-03-03",
   "MY LADY'S BIRTHDAY",
   "A lot of money to spent!!!!",
   "birthday"

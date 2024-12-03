@@ -46,6 +46,48 @@
   /* VARIABLES ================================================*/
   /* RESPONSIVE ================================================*/
   /* ===========================================================*/
+  /* Resetting box model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Removing default list styles */
+ol, ul {
+  list-style: none;
+}
+
+/* Removing default links styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Resetting form controls */
+button, input, select, textarea {
+  background: #f5f5dc;
+  border: none;
+  color: black;
+  outline: none;
+}
+
+/* Resetting tables */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Resetting images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+  
   body {
     position: realative;
     height: 100%;
@@ -63,7 +105,7 @@
   }
   html {
     height: 100%;
-    background: #003567;
+    background: #ffe7b2;
     color: #ffffff;
     font-size: 13px;
     font-family: "Lato", sans-serif;
@@ -116,7 +158,7 @@
     height: 80px;
     width: 100%;
     z-index: 50;
-    background: #003567;
+    background: #007b5c;
   }
   header > .wrapper {
     display: flex;
@@ -203,7 +245,7 @@
     width: 30px;
     height: 30px;
     padding: 9px 12px;
-    background-color: #004b8f;
+    background-color: #01543f;
     cursor: pointer;
     z-index: 10;
     box-sizing: border-box;
@@ -231,14 +273,14 @@
   }
   .c-month .prev:hover {
     padding: 9px 10px;
-    background-color: #0055a4;
+    background-color: #007d43;
   }
   .c-month .next {
     right: 0;
   }
   .c-month .next:hover {
     padding: 9px 14px;
-    background-color: #0055a4;
+    background-color: #007d43;
   }
   .c-paginator__year {
     height: 80px;
@@ -250,7 +292,7 @@
     padding: 0 10px;
     line-height: 30px;
     height: 30px;
-    background-color: #004b8f;
+    background-color: #009c75;
     text-transform: uppercase;
     letter-spacing: 2px;
     border-radius: 15px;
@@ -270,7 +312,7 @@
     margin-left: 10px;
   }
   .o-btn:hover {
-    background-color: #0055a4;
+    background-color: #007140;
   }
   .c-calendar {
     padding-top: 80px;
@@ -279,7 +321,7 @@
     flex-direction: row;
   }
   .c-calendar__style {
-    background-color: #00407b;
+    background-color: #007b5c;
     margin: 20px;
     padding: 10px;
     box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.18);
@@ -372,7 +414,7 @@
     width: 40px;
     height: 40px;
     line-height: 40px;
-    background: #004585;
+    background: #1da785;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     border-radius: 50%;
@@ -389,19 +431,19 @@
     background: rgba(215, 16, 15, 0.2);
   }
   .c-cal__cel:nth-child(7) p {
-    background: #003b71;
+    background: #005c45;
   }
   .c-cal__cel:hover {
-    background-color: #004b8f !important;
+    background-color: #008f6b !important;
   }
   .c-cal__cel:hover p {
-    background: #003b71 !important;
+    background: #01674e !important;
   }
   .c-cal__cel.isSelected {
-    background-color: #004b8f;
+    background-color: #006048;
   }
   .c-cal__cel.isSelected p {
-    background: #003b71;
+    background: #01ab80;
   }
   .c-cal__cel.isToday {
     background-color: rgba(245, 113, 112, 0.2);
@@ -540,5 +582,7 @@
   }
   input {
     height: 40px;
+    background: #f5f5dc;
+    color: black;
   }
   
