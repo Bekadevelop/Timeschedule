@@ -1,0 +1,13 @@
+{% extends "uuser/base.html" %}
+
+{% block title %}Registration Successful{% endblock %}
+
+{% block content %}
+<main>
+    <div style="max-width: 400px; margin: 30px auto; padding: 20px; background-color: #e6f4e4; border: 2px solid #a2d5ab; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center;">
+        <h2 style="color: #4a3626; font-size: 1.8rem; margin-bottom: 20px;">Registration Successful!</h2>
+        <p style="color: #4a3626; font-size: 1.2rem; margin-bottom: 20px;">Thank you for registering. You can now log in.</p>
+        <a href="{% url 'login' %}" style="display: inline-block; padding: 10px 20px; background-color: #a2d5ab; color: white; text-decoration: none; border-radius: 5px; font-size: 1rem; font-weight: bold;">Go to Login</a>
+    </div>
+</main>
+{% endblock %}

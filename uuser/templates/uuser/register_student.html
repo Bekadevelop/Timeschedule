@@ -1,0 +1,20 @@
+{% extends "uuser/base.html" %}
+
+{% block title %}Register as Student{% endblock %}
+
+{% block content %}
+<main>
+    <div style="max-width: 400px; margin: 30px auto; padding: 20px; background-color: #fffdf6; border: 2px solid #a2d5ab; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="text-align: center; color: #4a3626; font-size: 1.8rem; margin-bottom: 20px;">Register as Student</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #a2d5ab; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;">
+                Register
+            </button>
+        </form>
+    </div>
+</main>
+{% endblock %}

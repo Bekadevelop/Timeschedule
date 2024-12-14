@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My App{% endblock %}</title>
+    <style>
+
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fffaf0; /* Молочный фон */
+            color: #4a3626; /* Коричневый текст */
+        }
+
+        /* Хедер */
+        header {
+            background-color: #a2d5ab; /* Зеленоватый цвет */
+            color: #4a3626; /* Коричневый */
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+        }
+
+        header nav a {
+            color: #4a3626; /* Коричневый текст */
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        header input[type="date"] {
+            padding: 8px;
+            border: 2px solid #4a3626; /* Коричневая рамка */
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #e6f4e4; /* Светло-зеленый */
+            color: #4a3626;
+        }
+
+        /* Основной контент */
+        main {
+            padding: 20px;
+            background-color: #fffdf6; /* Молочный тон */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        /* Футер */
+        footer {
+            background-color: #4a3626; /* Темно-коричневый */
+            color: #fffaf0; /* Молочный текст */
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        table#schedule-table {
+            border: 1px solid #a2d5ab;
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+        }
+
+        table#schedule-table th, table#schedule-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table#schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table#schedule-table tr:hover {
+            background-color: #e6f4e4;
+        }
+
+        table#schedule-table th {
+            background-color: #a2d5ab;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to My App</h1>
+    <nav>
+        <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+
+    </nav>
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+<footer>
+    <p>&copy; 2024 My App</p>
+</footer>
+</body>
+</html>

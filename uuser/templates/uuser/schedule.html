@@ -1,0 +1,203 @@
+{% extends "uuser/base.html" %}
+
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+<h2>Schedule for the week {{ start_of_week|date:"d M" }} - {{ end_of_week|date:"d M" }}</h2>
+
+<!-- Week selection -->
+<div style="margin-bottom: 20px;">
+    <form method="get" action="" style="display: inline;">
+        <label for="week">Select Week:</label>
+        <select id="week" name="week" onchange="this.form.submit()">
+            {% for week in weeks_range %}
+            <option value="{{ week }}" {% if week == selected_week %}selected{% endif %}>
+                Week {{ week }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<!-- Schedule -->
+{% if schedules %}
+<table id="schedule-table" border="1" cellspacing="0" cellpadding="5"
+       style="width: 100%; border-collapse: collapse; text-align: center;">
+    <thead>
+    <tr style="background-color: #f2f2f2;">
+        <th>Date</th>
+        <th>Time</th>
+        <th>Group</th>
+        <th>Subject</th>
+        <th>Room</th>
+        <th>Teacher</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for schedule in schedules %}
+    <tr>
+        <td>{{ schedule.date_time|date:"d M, Y" }}</td>
+        <td>{{ schedule.date_time|time:"H:i" }} - {{ schedule.end_time|time:"H:i" }}</td>
+        <td>{{ schedule.groups.all|join:", " }}</td>
+        <td>{{ schedule.subjects.all|join:", " }}</td>
+        <td>{{ schedule.cabinet }}</td>
+        <td>{{ schedule.teachers.all|join:", " }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div style="text-align: center; margin-top: 20px;">
+    <p>No schedule available for the selected week.</p>
+    <img src="" alt="No Schedule" style="max-width: 400px; width: 100%;">
+</div>
+{% endif %}
+
+<h1>Push Notifications Demo</h1>
+    {% csrf_token %}
+    <button id="enable-notifications">Enable Notifications</button>
+
+    <script>
+        const NOTIFICATION_KEY = "{{ NOTIFICATION_KEY }}";
+
+        // Function to convert the key
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+        }
+
+        // Request permission for notifications
+        function requestPermission() {
+          return new Promise(function(resolve, reject) {
+            const permissionResult = Notification.requestPermission(function(result) {
+              resolve(result);
+            });
+            if (permissionResult) {
+              permissionResult.then(resolve, reject);
+            }
+          }).then(function(permissionResult) {
+            if (permissionResult !== 'granted') {
+              console.log('Permission not granted:', permissionResult);
+              throw new Error('Permission not granted.');
+            }
+          });
+        }
+
+        // Subscribe to push notifications
+        function subscribeUserToPush(key) {
+          return navigator.serviceWorker.register('/static/js/sw.js')
+            .then(function(registration) {
+              var subscribeOptions = {
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(key),
+              };
+              return registration.pushManager.subscribe(subscribeOptions);
+            })
+            .then(function(pushSubscription) {
+              sendSubscriptionToBackEnd(pushSubscription);
+            });
+        }
+
+        function sendSubscriptionToBackEnd(subscription) {
+          const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+
+          fetch('{% url "save_subscription" %}', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrfToken,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(subscription)
+          }).then(response => response.json())
+            .then(data => console.log('Subscription saved:', data))
+            .catch(err => console.log('Error saving subscription:', err));
+        }
+
+        document.getElementById('enable-notifications').addEventListener('click', function() {
+          requestPermission().then(function() {
+            // Permission granted, now subscribe
+            subscribeUserToPush(NOTIFICATION_KEY);
+          }).catch(function(err) {
+            console.log("Error:", err);
+          });
+        });
+    </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var table = document.getElementById("schedule-table");
+        if (table) {
+            var rows = table.querySelectorAll("tbody tr");
+            var prevDate = null;
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].querySelectorAll("td");
+                if (cells.length > 0) {
+                    var currentDate = cells[0].innerText.trim();
+
+                    // Если дата изменилась по сравнению с предыдущей строкой и это не первая строка
+                    if (prevDate && currentDate !== prevDate) {
+                        var blankRow = document.createElement("tr");
+                        var blankCell = document.createElement("td");
+                        blankCell.setAttribute("colspan", "7");
+                        blankCell.style.border = "none";
+                        blankCell.style.height = "10px";
+                        blankCell.style.backgroundColor = "yellow"; // для отладки
+
+                        // Обрабатываем дату в формате "12 Dec, 2024"
+                        var dateObj = new Date(currentDate);
+                        if (!isNaN(dateObj)) {
+                            var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                            var dayOfWeek = daysOfWeek[dateObj.getDay()];
+                            blankCell.textContent = dayOfWeek; // Устанавливаем день недели
+                        } else {
+                            blankCell.textContent = "Invalid Date"; // Для отладки
+                        }
+
+                        blankRow.appendChild(blankCell);
+                        rows[i].parentNode.insertBefore(blankRow, rows[i]);
+                    }
+
+                    prevDate = currentDate;
+                }
+            }
+        }
+    });
+</script>
+
+
+<script>
+function checkWorkerAndPushManager() {
+    if (!('serviceWorker' in navigator)) {
+        console.log('Workers are not supported.');
+        return false;
+    }
+    if (!('PushManager' in window)) {
+        console.log('Push notifications are not supported.');
+        return false;
+    }
+    return true;
+}
+
+function registerWorker() {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/static/js/sw.js').then(function (registration) {
+            console.log('ServiceWorker registration successful', registration);
+        }, function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+
+var supported = checkWorkerAndPushManager();
+if (supported) {
+    registerWorker();
+}
+</script>
+
+
+
+{% endblock %}
