@@ -1,12 +1,19 @@
-from django.shortcuts import render
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .forms import StudentRegistrationForm, TeacherRegistrationForm
-from myproject import settings
-from django.shortcuts import render
-from .forms import StudentRegistrationForm
+from django.utils.timezone import now
+from datetime import datetime, timedelta
+from .models import Schedule, CustomUser, UserSubscription
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import json
+from pywebpush import webpush, WebPushException
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def register_student(request):
     if request.method == "POST":
@@ -23,18 +30,16 @@ def register_teacher(request):
     if request.method == "POST":
         form = TeacherRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('dashboard')
+            try:
+                user = form.save()
+                login(request, user)
+                return redirect('dashboard')
+            except Exception as e:
+                return render(request, 'error.html', {'message': str(e)})
     else:
         form = TeacherRegistrationForm()
     return render(request, 'register_teacher.html', {'form': form})
 
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from .models import CustomUser
 
 
 def login_view(request):
@@ -66,23 +71,6 @@ def teacher_page(request):
         'message': f'Привет, учитель {request.user.username}!'
     })
 
-from django.shortcuts import render
-from django.utils.timezone import now
-from datetime import datetime, timedelta
-from django.conf import settings
-from .models import Schedule
-
-from datetime import datetime, timedelta
-from django.utils.timezone import now
-from django.shortcuts import render
-from django.conf import settings
-from uuser.models import Schedule
-
-from datetime import datetime, timedelta
-from django.utils.timezone import now
-from django.shortcuts import render
-from django.conf import settings
-from uuser.models import Schedule
 
 def schedule_view(request):
     user = request.user
@@ -113,6 +101,7 @@ def schedule_view(request):
     try:
         selected_week = int(selected_week_str)
     except ValueError:
+        logger.warning(f"Invalid week value: {selected_week_str}")
         selected_week = current_week
 
     # Рассчитываем начало и конец выбранной недели
@@ -149,11 +138,6 @@ def schedule_view(request):
 
     return render(request, 'uuser/schedule.html', context)
 
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
-from .models import UserSubscription
 
 @csrf_exempt
 @login_required
@@ -170,10 +154,6 @@ def save_subscription(request):
     return JsonResponse({"status": "error"}, status=400)
 
 
-import json
-from pywebpush import webpush, WebPushException
-from django.conf import settings
-from .models import UserSubscription
 
 def push_notification(user_id):
     user_subscriptions = UserSubscription.objects.filter(user_id=user_id)
@@ -192,6 +172,13 @@ def push_notification(user_id):
                 }
             )
         except WebPushException as ex:
-            print("Error sending push:", ex)
-            # Если ex.response.status_code == 410, то можно удалить подписку из БД
+            # print("Error sending push:", ex)
+            # # Если ex.response.status_code == 410, то можно удалить подписку из БД
+            if ex.response and ex.response.status_code == 410:
+                # Если код ответа 410, удаляем устаревшую подписку
+                subscription.delete()
+                logger.warning(f"Subscription removed due to error 410: {ex}")
+            else:
+                # Логируем ошибку для других случаев
+                logger.error(f"Push notification failed: {ex}")
 

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -55,11 +56,7 @@ class Cabinet(models.Model):
 
 
 # Расписание
-from django.core.exceptions import ValidationError
-from django.db import models
 
-from django.core.exceptions import ValidationError
-from django.db import models
 
 class Schedule(models.Model):
     groups = models.ManyToManyField('StudentGroup', related_name="schedule_groups")
@@ -99,7 +96,6 @@ class Teacher(models.Model):
         verbose_name_plural = "Teachers"
 
 
-from django.db import models
 
 class UserSubscription(models.Model):
     subscription = models.CharField(max_length=500)

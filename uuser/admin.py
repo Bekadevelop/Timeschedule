@@ -1,5 +1,8 @@
 from django.contrib import admin
 from .models import CustomUser, StudentGroup, Subject, Cabinet, Schedule, Student, Teacher, UserSubscription
+from django.core.exceptions import ValidationError
+from django.forms import BaseInlineFormSet
+from .forms import ScheduleForm
 
 
 @admin.register(CustomUser)
@@ -29,16 +32,6 @@ class CabinetAdmin(admin.ModelAdmin):
     search_fields = ('number',)
 
 
-from django.contrib import admin
-from .models import Schedule
-
-from django.contrib import admin
-from django.core.exceptions import ValidationError
-from django.forms import BaseInlineFormSet
-from .models import Schedule
-from django.contrib import admin
-from uuser.models import Schedule
-from .forms import ScheduleForm
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):

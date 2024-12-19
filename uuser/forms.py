@@ -2,6 +2,9 @@ from django import forms
 from .models import Student, Teacher
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from django.core.exceptions import ValidationError
+from uuser.models import Schedule, Subject, CustomUser
+
 
 class StudentRegistrationForm(UserCreationForm):
     class Meta:
@@ -32,9 +35,6 @@ class TeacherRegistrationForm(UserCreationForm):
 
 
 
-from django import forms
-from django.core.exceptions import ValidationError
-from uuser.models import Schedule, Subject, CustomUser
 
 class ScheduleForm(forms.ModelForm):
     class Meta:

@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LogoutView
+from django.shortcuts import redirect
 
 urlpatterns = [
+    path('', lambda request: redirect('login')),
     path('register/student/', views.register_student, name='register_student'),
     path('register/teacher/', views.register_teacher, name='register_teacher'),
     path('login/', views.login_view, name='login'),

@@ -1,34 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* Основные стили */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-container {
+            padding: 20px;
+            background-color: #fffdf6;
+            border: 2px solid #a2d5ab;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #4a3626;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a3626;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .login-button {
+            width: 100%; /* Полная ширина */
+            box-sizing: border-box; /* Учитываем padding и border */
+            padding: 10px;
+            border: 1px solid #a2d5ab;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .login-button {
+            background-color: #a2d5ab;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            margin-top: 10px; /* Отступ сверху для кнопки */
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #8cbf91;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .forgot-password a {
+            color: #4a3626;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #a2d5ab;
+        }
+    </style>
 </head>
 <body>
-
-
 <main>
-    <div style="max-width: 400px; margin: 30px auto; padding: 20px; background-color: #fffdf6; border: 2px solid #a2d5ab; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <h2 style="text-align: center; color: #4a3626; font-size: 1.8rem; margin-bottom: 20px;">Login</h2>
+    <div class="login-container">
+        <h2>Login</h2>
         <form method="post">
             {% csrf_token %}
             {% if error %}
                 <p style="color: #d9534f; text-align: center; font-weight: bold;">{{ error }}</p>
             {% endif %}
-            <div style="margin-bottom: 15px;">
-                <label for="username" style="display: block; margin-bottom: 5px; color: #4a3626; font-weight: bold;">Username:</label>
-                <input type="text" name="username" id="username" required style="width: 100%; padding: 10px; border: 1px solid #a2d5ab; border-radius: 5px; font-size: 1rem;">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required>
             </div>
-            <div style="margin-bottom: 15px;">
-                <label for="password" style="display: block; margin-bottom: 5px; color: #4a3626; font-weight: bold;">Password:</label>
-                <input type="password" name="password" id="password" required style="width: 100%; padding: 10px; border: 1px solid #a2d5ab; border-radius: 5px; font-size: 1rem;">
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
             </div>
-            <button type="submit" style="width: 100%; padding: 10px; background-color: #a2d5ab; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer;">Login</button>
+            <button type="submit" class="login-button">Login</button>
         </form>
-        <p style="text-align: center; margin-top: 15px;"><a href="{% url 'password_reset' %}" style="color: #4a3626; text-decoration: none;">Forgot your password?</a></p>
+        <p class="forgot-password">
+            <a href="{% url 'password_reset' %}">Forgot your password?</a>
+        </p>
     </div>
 </main>
 </body>

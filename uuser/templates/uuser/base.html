@@ -9,6 +9,9 @@
         /* Общий стиль */
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Минимальная высота на весь экран */
             margin: 0;
             padding: 0;
             background-color: #fffaf0; /* Молочный фон */
@@ -58,6 +61,7 @@
 
         /* Основной контент */
         main {
+            flex: 1; /* Основной контент занимает всё доступное пространство */
             padding: 20px;
             background-color: #fffdf6; /* Молочный тон */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
